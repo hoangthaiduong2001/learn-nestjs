@@ -14,6 +14,7 @@ export class UsersService {
     const hash = hashSync(password, salt);
     return hash;
   };
+
   async create(createUserDto: CreateUserDto) {
     const { email, name, password } = createUserDto;
     const hashPassword = this.hashPassword(password);
@@ -24,19 +25,80 @@ export class UsersService {
     };
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll() {
+    try {
+      const user = await this.userModel.find();
+      return {
+        message: 'Get all user successfully',
+        result: user,
+      };
+    } catch (error) {
+      return {
+        message: 'Error while retrieving user',
+        error: error.message,
+      };
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: string) {
+    try {
+      const user = await this.userModel.findOne({ _id: id });
+      if (!user) {
+        return {
+          message: 'User not found',
+        };
+      }
+      return {
+        message: 'Get information user successfully',
+        result: user,
+      };
+    } catch (error) {
+      return {
+        message: 'Error while retrieving user',
+        error: error.message,
+      };
+    }
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    try {
+      const user = await this.userModel.findByIdAndUpdate({ _id: id }, updateUserDto, {
+        new: true,
+      });
+      if (!user) {
+        return {
+          message: 'User not found',
+        };
+      }
+      return {
+        message: 'Update information user successfully',
+        result: user,
+      };
+    } catch (error) {
+      return {
+        message: 'Error while retrieving user',
+        error: error.message,
+      };
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    try {
+      const user = await this.userModel.findByIdAndDelete({ _id: id });
+      if (!user) {
+        return {
+          message: 'User not found',
+        };
+      }
+      return {
+        message: 'Delete user successfully',
+        result: user,
+      };
+    } catch (error) {
+      return {
+        message: 'Error while retrieving user',
+        error: error.message,
+      };
+    }
   }
 }
