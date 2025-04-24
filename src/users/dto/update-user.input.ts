@@ -7,7 +7,7 @@ export class UpdateUserDto {
   @IsString()
   id: string;
 
-  @Field(() => String)
+  @Field()
   @IsString()
   name: string;
 
@@ -15,11 +15,11 @@ export class UpdateUserDto {
   @IsInt()
   age: number;
 
-  @Field(() => String)
+  @Field()
   @IsString()
   phone: string;
 
-  @Field(() => String)
+  @Field()
   @IsString()
   address: string;
 }

@@ -34,22 +34,6 @@ export class UsersService {
   }
 
   async delete(id: string) {
-    try {
-      const user = await this.userModel.findByIdAndDelete({ _id: id });
-      if (!user) {
-        return {
-          message: 'User not found',
-        };
-      }
-      return {
-        message: 'Delete user successfully',
-        result: user,
-      };
-    } catch (error) {
-      return {
-        message: 'Error while retrieving user',
-        error: error.message,
-      };
-    }
+    return this.userModel.findByIdAndDelete(id);
   }
 }
