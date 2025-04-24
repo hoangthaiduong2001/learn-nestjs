@@ -1,0 +1,59 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input CreateUserDto {
+  email: String!
+  name: String!
+  password: String!
+}
+
+type CreateUserListResponse {
+  message: String!
+  result: User!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Mutation {
+  create(input: CreateUserDto!): CreateUserListResponse!
+  update(updateUserInput: UpdateUserDto!): UserResponse!
+}
+
+type Query {
+  findOne(id: String!): UserResponse!
+  users: UserListResponse!
+}
+
+input UpdateUserDto {
+  address: String!
+  age: Float!
+  id: String!
+  name: String!
+  phone: String!
+}
+
+type User {
+  address: String!
+  age: Float!
+  createAt: DateTime!
+  email: String!
+  id: ID!
+  name: String!
+  password: String!
+  phone: String!
+  updatedAt: DateTime!
+}
+
+type UserListResponse {
+  message: String!
+  result: [User!]!
+}
+
+type UserResponse {
+  message: String!
+  result: User
+}
