@@ -1,5 +1,7 @@
+import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import mongoose from 'mongoose';
+import { GqlJwtAuthGuard } from 'src/jwt-auth.guard';
 import { CreateUserListResponse } from './dto/create-user-response.dto';
 import { CreateUserDto } from './dto/create-user.input';
 import { DeleteUserDTO } from './dto/delete-user.input';
@@ -22,6 +24,7 @@ export class UserResolver {
     };
   }
 
+  @UseGuards(GqlJwtAuthGuard)
   @Query(() => UserListResponse)
   async users(): Promise<UserListResponse> {
     const user = await this.usersService.findAll();

@@ -2,6 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type AuthResponse {
+  accessToken: String!
+  message: String!
+  refreshToken: String!
+}
+
 input CreateUserDto {
   email: String!
   name: String!
@@ -22,9 +28,15 @@ input DeleteUserDTO {
   id: ID!
 }
 
+input LoginInput {
+  email: String!
+  password: String!
+}
+
 type Mutation {
   create(input: CreateUserDto!): CreateUserListResponse!
   delete(userId: DeleteUserDTO!): UserResponse!
+  login(loginInput: LoginInput!): AuthResponse!
   update(updateUserInput: UpdateUserDto!): UserResponse!
 }
 
