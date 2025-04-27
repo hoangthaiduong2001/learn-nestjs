@@ -33,10 +33,15 @@ input LoginInput {
   password: String!
 }
 
+type LogoutResponse {
+  message: String!
+}
+
 type Mutation {
   create(input: CreateUserDto!): CreateUserListResponse!
   delete(userId: DeleteUserDTO!): UserResponse!
   login(loginInput: LoginInput!): AuthResponse!
+  logout(refreshToken: String!): LogoutResponse!
   update(updateUserInput: UpdateUserDto!): UserResponse!
 }
 

@@ -4,10 +4,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PassportModule } from '@nestjs/passport';
+import { GraphQLError } from 'graphql';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import { LocalStrategy } from './auth/passport/local.strategy';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -25,6 +25,16 @@ import { UsersModule } from './users/users.module';
       context: ({ req }) => ({ req }),
       playground: true,
       sortSchema: true,
+      formatError: (error: GraphQLError) => {
+        const originalError = (error.extensions?.originalError as any) || {};
+        return {
+          message: originalError.message || error.message,
+          errorOrigin: {
+            error: originalError.error || 'Internal Server Error',
+            statusCode: originalError.statusCode || 500,
+          },
+        };
+      },
     }),
     ConfigModule.forRoot({ isGlobal: true }),
     UsersModule,
@@ -32,6 +42,6 @@ import { UsersModule } from './users/users.module';
     PassportModule,
   ],
   controllers: [AppController],
-  providers: [AppService, LocalStrategy],
+  providers: [AppService],
 })
 export class AppModule {}
