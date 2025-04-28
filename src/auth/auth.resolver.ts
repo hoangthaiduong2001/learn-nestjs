@@ -4,6 +4,7 @@ import { AuthService } from './auth.service';
 import { AuthResponse } from './dto/auth-response';
 import { LoginInput } from './dto/login.input';
 import { LogoutResponse } from './dto/logout-response';
+import { RefreshTokenResponse } from './dto/refreshToken-response';
 
 @Resolver()
 export class AuthResolver {
@@ -27,6 +28,16 @@ export class AuthResolver {
     }
     return {
       message: 'Logout successfully',
+    };
+  }
+
+  @Mutation(() => RefreshTokenResponse)
+  async refreshToken(@Args('refreshToken') refreshToken: string): Promise<RefreshTokenResponse> {
+    const { accessToken, newRefreshToken } = await this.authService.refreshToken(refreshToken);
+    return {
+      message: 'Refresh token successfully',
+      accessToken,
+      refreshToken: newRefreshToken,
     };
   }
 }

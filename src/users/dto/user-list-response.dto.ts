@@ -7,5 +7,5 @@ export class UserListResponse {
   message: string;
 
   @Field(() => [User])
-  result?: User[];
+  result?: Omit<User, 'password'>[];
 }

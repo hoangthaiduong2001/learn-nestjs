@@ -42,12 +42,19 @@ type Mutation {
   delete(userId: DeleteUserDTO!): UserResponse!
   login(loginInput: LoginInput!): AuthResponse!
   logout(refreshToken: String!): LogoutResponse!
+  refreshToken(refreshToken: String!): RefreshTokenResponse!
   update(updateUserInput: UpdateUserDto!): UserResponse!
 }
 
 type Query {
   findOne(id: String!): UserResponse!
   users: UserListResponse!
+}
+
+type RefreshTokenResponse {
+  accessToken: String!
+  message: String!
+  refreshToken: String!
 }
 
 input UpdateUserDto {
@@ -59,14 +66,14 @@ input UpdateUserDto {
 }
 
 type User {
-  address: String!
-  age: Float!
-  createAt: DateTime!
+  address: String
+  age: Float
+  createdAt: DateTime!
   email: String!
   id: ID!
   name: String!
-  password: String!
-  phone: String!
+  phone: String
+  role: String!
   updatedAt: DateTime!
 }
 

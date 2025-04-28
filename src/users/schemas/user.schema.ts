@@ -4,6 +4,11 @@ import { HydratedDocument } from 'mongoose';
 
 export type UserDocument = HydratedDocument<User>;
 
+export enum UserRole {
+  USER = 'user',
+  ADMIN = 'admin',
+}
+
 @Schema({
   timestamps: true,
   toJSON: {
@@ -29,24 +34,27 @@ export class User {
   email: string;
 
   @Prop()
-  @Field()
   password: string;
 
   @Prop()
+  @Field({ nullable: true })
+  age?: number;
+
+  @Prop()
+  @Field({ nullable: true })
+  phone?: string;
+
+  @Prop()
+  @Field({ nullable: true })
+  address?: string;
+
+  @Prop({ default: UserRole.USER })
   @Field()
-  age: number;
+  role: UserRole;
 
   @Prop()
   @Field()
-  phone: string;
-
-  @Prop()
-  @Field()
-  address: string;
-
-  @Prop()
-  @Field()
-  createAt: Date;
+  createdAt: Date;
 
   @Prop()
   @Field()

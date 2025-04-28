@@ -34,7 +34,7 @@ export class RefreshToken {
 
   @Field({ nullable: true })
   @Prop()
-  createAt?: Date;
+  createdAt?: Date;
 
   @Field()
   @Prop({ required: true })
