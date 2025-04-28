@@ -11,6 +11,7 @@ import { UserResponse } from './dto/user-response.dto';
 import { User } from './schemas/user.schema';
 import { UsersService } from './users.service';
 
+@UseGuards(GqlJwtAuthGuard)
 @Resolver(() => User)
 export class UserResolver {
   constructor(private readonly usersService: UsersService) {}
@@ -24,7 +25,6 @@ export class UserResolver {
     };
   }
 
-  @UseGuards(GqlJwtAuthGuard)
   @Query(() => UserListResponse)
   async users(): Promise<UserListResponse> {
     const user = await this.usersService.findAll();
@@ -55,6 +55,7 @@ export class UserResolver {
     };
   }
 
+  // @UseGuards(GqlJwtAuthGuard)
   @Mutation(() => UserResponse)
   async update(@Args('updateUserInput') updateUserDto: UpdateUserDto): Promise<UserResponse> {
     const user = await this.usersService.update(updateUserDto.id, updateUserDto);

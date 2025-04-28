@@ -53,7 +53,7 @@ export class AuthService {
       token: refreshToken,
       iat: new Date(decodedToken.iat * 1000),
       exp: new Date(decodedToken.exp * 1000),
-      createAt: new Date(),
+      createdAt: new Date(),
     });
     return {
       accessToken,
@@ -63,5 +63,40 @@ export class AuthService {
 
   async logout(refreshToken: string) {
     return this.refreshTokenModel.deleteOne({ token: refreshToken });
+  }
+
+  async refreshToken(refreshToken: string) {
+    if (!refreshToken) {
+      throw new UnauthorizedException('Refresh token is required.');
+    }
+
+    const decodedToken = decodeToken(refreshToken);
+
+    const existingToken = await this.refreshTokenModel.findOne({ token: refreshToken });
+    if (!existingToken) {
+      throw new UnauthorizedException('Refresh token not found.');
+    }
+
+    const user = await this.usersService.findOne(decodedToken.sub);
+    if (!user) {
+      throw new UnauthorizedException('User not found.');
+    }
+
+    const payload = { sub: user.id, name: user.name, role: user.role };
+    const accessToken = this.jwtService.sign(payload, {
+      secret: this.configService.get<string>('ACCESS_TOKEN_SECRET'),
+      expiresIn: '15m',
+    });
+    const expiresDateRefreshToken = decodedToken.exp - Math.floor(Date.now() / 1000);
+    const newRefreshToken = this.jwtService.sign(payload, {
+      secret: this.configService.get<string>('REFRESH_TOKEN_SECRET'),
+      expiresIn: expiresDateRefreshToken,
+    });
+    await this.refreshTokenModel.updateOne({ token: refreshToken }, { token: newRefreshToken });
+
+    return {
+      accessToken,
+      newRefreshToken,
+    };
   }
 }
