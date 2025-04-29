@@ -26,12 +26,24 @@ import { UsersModule } from './users/users.module';
       playground: true,
       sortSchema: true,
       formatError: (error: GraphQLError) => {
-        const originalError = (error.extensions?.originalError as any) || {};
+        const originalError = error.extensions?.originalError as any;
+        console.log('error.originalError.err', error.extensions.originalError);
+        if (originalError?.message && originalError?.statusCode) {
+          return {
+            message: originalError.errors[0].errors,
+            errorOrigin: {
+              field: originalError.errors[0].field,
+              error: originalError.message || 'Bad Request',
+              statusCode: originalError.statusCode,
+            },
+          };
+        }
+
         return {
-          message: originalError.message || error.message,
+          message: error.message,
           errorOrigin: {
-            error: originalError.error || 'Internal Server Error',
-            statusCode: originalError.statusCode || 500,
+            error: 'Internal Server Error',
+            statusCode: 500,
           },
         };
       },

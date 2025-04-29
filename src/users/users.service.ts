@@ -21,8 +21,8 @@ export class UsersService {
     return this.userModel.create({ name, email, password: hashPassword });
   }
 
-  async findAll(): Promise<User[]> {
-    return this.userModel.find().exec();
+  async findAll({ skip = 0, limit = 10 }: { skip?: number; limit?: number }): Promise<User[]> {
+    return this.userModel.find().skip(skip).limit(limit).exec();
   }
 
   async findOne(id: string) {
