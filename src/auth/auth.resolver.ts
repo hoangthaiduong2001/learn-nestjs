@@ -1,5 +1,7 @@
-import { UnauthorizedException } from '@nestjs/common';
+import { UnauthorizedException, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Public } from 'src/decorator/public';
+import { GqlJwtAuthGuard } from 'src/jwt-auth.guard';
 import { AuthService } from './auth.service';
 import { AuthResponse } from './dto/auth-response';
 import { LoginInput } from './dto/login.input';
@@ -7,9 +9,11 @@ import { LogoutResponse } from './dto/logout-response';
 import { RefreshTokenResponse } from './dto/refreshToken-response';
 
 @Resolver()
+@UseGuards(GqlJwtAuthGuard)
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
+  @Public()
   @Mutation(() => AuthResponse)
   async login(@Args('loginInput') loginInput: LoginInput): Promise<AuthResponse> {
     const data = await this.authService.login(loginInput.email, loginInput.password);

@@ -48,7 +48,7 @@ type Mutation {
 
 type Query {
   findOne(id: String!): UserResponse!
-  users: UserListResponse!
+  users(limit: Int, page: Int): UserListResponse!
 }
 
 type RefreshTokenResponse {
